@@ -11,18 +11,17 @@ import { PostsService } from '../shared/posts.service';
 })
 export class PostPageComponent implements OnInit {
 
-  post$: Observable<Post>
+  public post$: Observable<Post>
 
-  constructor(
+  public constructor(
     private postsService: PostsService,
     private route: ActivatedRoute
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.post$ = this.route.params
-    .pipe(switchMap((params: Params) => {
+    .pipe(switchMap((params: Params): Observable<Post> => {
       return this.postsService.getById(params['id'])
     }))
   }
-
 }

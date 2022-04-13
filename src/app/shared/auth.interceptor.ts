@@ -7,12 +7,12 @@ import { AuthService } from "../admin/shared/services/auth.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(
+  public constructor(
     private auth: AuthService,
     private router: Router
   ) {}
 
-  intercept(
+  public intercept(
     req: HttpRequest<any>, 
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
@@ -25,7 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     return next.handle(req)
     .pipe(
-      catchError((error: HttpErrorResponse) => {
+      catchError((error: HttpErrorResponse): Observable<never> => {
         if (error.status === 401) {
           this.auth.logout()
           this.router.navigate(['/admin', 'login'], {

@@ -8,10 +8,10 @@ import { environment } from "src/environments/environment";
 export class AuthService {
   public error$: Subject<string> = new Subject<string>()
 
-  constructor(private http: HttpClient) {}
+  public constructor(private http: HttpClient) {}
 
-  get token(): string {
-    const expDate = new Date(localStorage.getItem('fb-token-exp'))
+  public get token(): string {
+    const expDate: Date = new Date(localStorage.getItem('fb-token-exp'))
     if (new Date() > expDate) {
       this.logout()
       return null
@@ -19,7 +19,7 @@ export class AuthService {
     return localStorage.getItem('fb-token')
   }
 
-  login(user: User): Observable<any> {
+  public login(user: User): Observable<any> {
     user.returnSecureToken = true
     return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.apiKey}`, user)
     .pipe(
@@ -28,16 +28,16 @@ export class AuthService {
     )
   }
 
-  logout() {
+  public logout(): void {
     this.setToken(null)
   }
 
-  isAuthentificated(): boolean {
+  public isAuthentificated(): boolean {
     return !!this.token
   }
 
-  private handleError(error: HttpErrorResponse) {
-    const { message } = error.error.error
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    const message: string = error.error.error
 
     switch (message) {
       case 'INVALID_EMAIL':
@@ -54,13 +54,13 @@ export class AuthService {
     return throwError(error)
   }
 
-  private setToken(response: FbAuthResponse | null) {
+  private setToken(response: FbAuthResponse | null): void {
     if (!response) {
       localStorage.clear()
       return
     }
 
-    const expDate = new Date(new Date().getTime() + +response.expiresIn * 1000)
+    const expDate: Date = new Date(new Date().getTime() + +response.expiresIn * 1000)
     localStorage.setItem('fb-token', response.idToken)
     localStorage.setItem('fb-token-exp', expDate.toString())
   }

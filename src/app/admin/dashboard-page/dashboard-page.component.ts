@@ -11,23 +11,24 @@ import { AlertService } from '../shared/services/alert.service';
 })
 export class DashboardPageComponent implements OnInit, OnDestroy {
 
-  posts: Post[] = []
-  pSub: Subscription
-  dSub: Subscription
-  searchStr: string = ''
+  public posts: Post[] = []
+  public searchStr: string = ''
 
-  constructor(
+  private pSub: Subscription
+  private dSub: Subscription
+
+  public constructor(
     private postsService: PostsService,
     private alert: AlertService
   ) { }
 
-  ngOnInit(): void {
-    this.pSub = this.postsService.getAll().subscribe(posts => {
+  public ngOnInit(): void {
+    this.pSub = this.postsService.getAll().subscribe((posts): void => {
       this.posts = posts
     })
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     if (this.pSub) {
       this.pSub.unsubscribe()
     }
@@ -37,9 +38,9 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  remove(id: string) {
-    this.postsService.remove(id).subscribe(() => {
-      this.posts = this.posts.filter((post) => post.id !== id)
+  public remove(id: string): void {
+    this.postsService.remove(id).subscribe((): void => {
+      this.posts = this.posts.filter((post): boolean => post.id !== id)
       this.alert.danger('Post have been deleted')
     })
   }

@@ -7,11 +7,11 @@ import { map } from "rxjs/operators";
 
 @Injectable({providedIn: 'root'})
 export class PostsService {
-  constructor(private http: HttpClient) {}
+  public constructor(private http: HttpClient) {}
 
-  create(post: Post): Observable<Post> {
+  public create(post: Post): Observable<Post> {
     return this.http.post(`${environment.fbDbUrl}/posts.json`, post)
-    .pipe(map((response: FbCreateResponse) => {
+    .pipe(map((response: FbCreateResponse): Post => {
       return {
         ...post,
         id: response.name,
@@ -20,12 +20,12 @@ export class PostsService {
     }))
   }
 
-  getAll(): Observable<Post[]> {
+  public getAll(): Observable<Post[]> {
     return this.http.get(`${environment.fbDbUrl}/posts.json`)
-    .pipe(map((response: {[key: string]: any}) => {
+    .pipe(map((response: {[key: string]: any}): Post[] => {
       return Object
       .keys(response)
-      .map(key => ({
+      .map((key): Post => ({
         ...response[key],
         id: key,
         date: new Date(response[key].date)
@@ -33,9 +33,9 @@ export class PostsService {
     }))
   }
 
-  getById(id: string): Observable<Post> {
+  public getById(id: string): Observable<Post> {
     return this.http.get<Post>(`${environment.fbDbUrl}/posts/${id}.json`)
-    .pipe(map((post: Post) => {
+    .pipe(map((post: Post): Post => {
       return {
         ...post,
         id,
@@ -45,11 +45,11 @@ export class PostsService {
     
   }
 
-  remove(id: string): Observable<void> {
+  public remove(id: string): Observable<void> {
     return this.http.delete<void>(`${environment.fbDbUrl}/posts/${id}.json`)
   }
 
-  update(post: Post): Observable<Post> {
+  public update(post: Post): Observable<Post> {
     return this.http.patch<Post>(`${environment.fbDbUrl}/posts/${post.id}.json`, post)
   }
 }

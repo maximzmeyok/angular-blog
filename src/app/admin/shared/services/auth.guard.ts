@@ -5,15 +5,12 @@ import { AuthService } from "./auth.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(
+  public constructor(
     private auth: AuthService,
     private router: Router
   ) {}
   
-  canActivate(
-    route: ActivatedRouteSnapshot, 
-    state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
+  public canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.auth.isAuthentificated()) {
       return true
     } else {

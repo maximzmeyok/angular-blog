@@ -11,14 +11,14 @@ import { AlertService } from '../shared/services/alert.service';
 })
 export class CreatePageComponent implements OnInit {
 
-  form: FormGroup;
+  public form: FormGroup;
 
-  constructor(
+  public constructor(
     private postsService: PostsService,
     private alert: AlertService
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.form = new FormGroup({
       title: new FormControl(null, Validators.required),
       text: new FormControl(null, Validators.required),
@@ -26,7 +26,7 @@ export class CreatePageComponent implements OnInit {
     })
   }
 
-  submit() {
+  public submit(): void {
     if (this.form.invalid) {
       return
     }
@@ -38,7 +38,7 @@ export class CreatePageComponent implements OnInit {
       date: new Date()
     }
 
-    this.postsService.create(post).subscribe(() => {
+    this.postsService.create(post).subscribe((): void => {
       this.form.reset()
       this.alert.success('Post have been created')
     })

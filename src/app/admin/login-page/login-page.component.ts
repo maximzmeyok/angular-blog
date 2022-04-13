@@ -11,18 +11,18 @@ import { AuthService } from '../shared/services/auth.service';
 })
 export class LoginPageComponent implements OnInit {
 
-  form: FormGroup
-  submitted = false
-  message: string
+  public form: FormGroup
+  public message: string
+  public submitted: boolean = false
 
-  constructor(
+  public constructor(
     public auth: AuthService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe((params: Params) => {
+  public ngOnInit(): void {
+    this.route.queryParams.subscribe((params: Params): void => {
       if (params['loginAgain']) {
         this.message = 'Enter all the information'
       } else if (params['authFailed']) {
@@ -36,7 +36,7 @@ export class LoginPageComponent implements OnInit {
     })
   }
 
-  submit() {
+  public submit(): void {
     if (this.form.invalid) {
       return
     }
@@ -48,11 +48,11 @@ export class LoginPageComponent implements OnInit {
       password: this.form.value.password
     }
 
-    this.auth.login(user).subscribe(() => {
+    this.auth.login(user).subscribe((): void => {
       this.form.reset()
       this.router.navigate(['/admin', 'dashboard'])
       this.submitted = false
-    }, () => {
+    }, (): void => {
       this.submitted = false
     })
   }

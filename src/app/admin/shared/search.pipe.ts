@@ -5,12 +5,12 @@ import { Post } from '../../shared/interfaces';
   name: 'searchPosts'
 })
 export class SearchPipe implements PipeTransform {
-  transform(posts: Post[], search = ''): Post[] {
+  public transform(posts: Post[], search = ''): Post[] {
     if (!search.trim()) {
       return posts
     }
 
-    return posts.filter((post) => {
+    return posts.filter((post): boolean => {
       return post.title.toLowerCase().includes(search.toLowerCase())
     })
   }

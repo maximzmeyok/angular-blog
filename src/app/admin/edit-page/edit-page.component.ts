@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, switchMap } from 'rxjs';
+import { Observable, Subscription, switchMap } from 'rxjs';
 import { PostsService } from 'src/app/shared/posts.service';
 import { Post } from '../../shared/interfaces';
 import { AlertService } from '../shared/services/alert.service';
@@ -13,24 +13,24 @@ import { AlertService } from '../shared/services/alert.service';
 })
 export class EditPageComponent implements OnInit, OnDestroy {
 
-  form: FormGroup
-  post: Post
-  submitted = false
+  public form: FormGroup
+  public submitted = false
 
-  uSub: Subscription
+  private post: Post
+  private uSub: Subscription
 
-  constructor(
+  public constructor(
     private route: ActivatedRoute,
     private postsService: PostsService,
     private alert: AlertService
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.route.params.pipe(
-      switchMap((params: Params) => {
+      switchMap((params: Params): Observable<Post> => {
         return this.postsService.getById(params['id'])
       })
-    ).subscribe((post: Post) => {
+    ).subscribe((post: Post): void => {
       this.post = post
       this.form = new FormGroup({
         title: new FormControl(post.title, Validators.required),
@@ -39,7 +39,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
     })
   }
 
-  submit() {
+  public submit(): void {
     if (this.form.invalid) {
       return
     }
@@ -50,13 +50,13 @@ export class EditPageComponent implements OnInit, OnDestroy {
       ...this.post,
       text: this.form.value.text,
       title: this.form.value.title
-    }).subscribe(() => {
+    }).subscribe((): void => {
       this.submitted = false
       this.alert.warning('Post have been refreshed')
     })
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     if (this.uSub) {
       this.uSub.unsubscribe()
     }
