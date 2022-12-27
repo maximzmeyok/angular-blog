@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { User } from 'src/app/shared/interfaces';
+import { AlertService } from '../shared/services/alert.service';
 import { AuthService } from '../shared/services/auth.service';
 
 @Component({
@@ -18,12 +19,15 @@ export class LoginPageComponent implements OnInit {
     public authService: AuthService,
     private _router: Router,
     private _route: ActivatedRoute,
+    private _alertService: AlertService,
   ) { }
 
   public ngOnInit(): void {
     this._route.queryParams.subscribe((params: Params) => {
       if (params['loginAgain']) {
         this.message = 'Войдите заново.';
+      } else if (params['authFailed']) {
+        this.message = 'Сессия истекла. Войдите заново.';
       }
     });
 
@@ -57,6 +61,7 @@ export class LoginPageComponent implements OnInit {
       this.submitted = false;
     }, () => {
       this.submitted = false;
+      this._alertService.success('Пост обновлён');
     });
   }
 }

@@ -24,15 +24,15 @@
 
   <div
     class="form-control"
-    [ngClass]="{invalid: form.get('autor')?.touched && form.get('autor')?.invalid}"
+    [ngClass]="{invalid: form.get('author')?.touched && form.get('author')?.invalid}"
   >
-    <label for="autor">Автор поста</label>
-    <input type="text" id="autor" formControlName="autor">
+    <label for="author">Автор поста</label>
+    <input type="text" id="author" formControlName="author">
     <div
-      *ngIf="form.get('autor')?.touched && form.get('autor')?.invalid" 
+      *ngIf="form.get('author')?.touched && form.get('author')?.invalid" 
       class="validation"
     >
-      <small *ngIf="form.get('autor').errors.required">
+      <small *ngIf="form.get('author').errors.required">
         Необходимо ввести автора поста.
       </small>
     </div>

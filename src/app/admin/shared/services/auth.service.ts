@@ -4,11 +4,11 @@ import { FbAuthResponse, User } from "src/app/shared/interfaces";
 import { catchError, Observable, Subject, tap, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthService {
-  constructor(private _http: HttpClient) { }
-
   public error$: Subject<string> = new Subject<string>();
+  
+  constructor(private _http: HttpClient) { }
 
   public get token(): string {
     const expDate: Date = new Date(localStorage.getItem('fb-token-exp'));
@@ -22,6 +22,7 @@ export class AuthService {
   }
 
   public login(user: User): Observable<any> {
+    user.returnSecureToken = true;
     return this._http.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.apiKey}`, user)
       .pipe(
         tap(this._setToken),
